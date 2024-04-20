@@ -18,27 +18,26 @@ const validationSchema = Yup.object({
 
 
 const UserRegistrationForm = () => {
-  const [messages,setMessages] = useState("data save succesfully"); 
+  const [messages,setMessages] = useState(""); 
   
-  useEffect(() => {     
+  useEffect(() => { 
     const timer = setTimeout(() => {
       setMessages("");
     }, 1000);
     return () => clearTimeout(timer);
   }, [messages]);
 
-  const handleSubmit = async (values, { setSubmitting ,resetForm}) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post('http://localhost:3001/api/register/', values);
-      console.log("response",response.data);
+      console.log(response.data);
       setMessages(response.data.message)
-      // console.log(response.data.message)
-      resetForm();
       setSubmitting(false);
       
     } catch (error) {
       console.error('Error:', error);
-      setMessages("something went wrong")
+      setMessages('something went wrong')
+      setMessages(error.response.data.message)
       setSubmitting(false);
     }
  };
@@ -60,23 +59,21 @@ console.log(messages)
         onSubmit={handleSubmit}
         
       >
-         
-            
         {({ isSubmitting }) => (
           
-       <div className=' w-100 h-screen  flex-container drop-shadow-2xl'>
-           {messages ? (
+       <div className=' w-100   sm:py-32 lg:px-8 flex-container '>
+
            
-           <div className="text-center  bg-[#52525b] text-white p-2 rounded absolute  md:right-5 md:left-auto top-5 left-1/2 min-w-[200px]">
-           {messages}
-          </div>
-              ) : null
-          }
          <div className='left-box'>
-         <Form className="  mx-auto  max-w-xl bg-white p-10 z-10 sm:w-screen ">
-        
+         <Form className=" mx-auto  max-w-xl bg-white p-10 ">
+         <div className="absolute inset-0 flex items-start justify-center mt-20">
+              {messages ? (
+                  <div className="text-center text-white bg-green-500 p-2 w-auto rounded">{messages}</div>
+              ) : null}
+          </div>
+            
             <div className=" grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2">
-            <div  style={{height:'5rem'}}>
+            <div className=' ' style={{height:'5rem'}}>
                 <label htmlFor="first-name" className="block text-left text-gray-700 text-sm font-bold mb-2 ">
                 First name
                 </label>

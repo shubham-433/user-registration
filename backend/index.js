@@ -24,7 +24,7 @@ app.post('/api/register', async (req, res) => {
     
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-        return res.status(400).send({message:'Email already in use'});
+        return res.status(200).send({message:'Email already in use',status:409});
     }
     let user = new User({
         firstName: req.body.firstName,
